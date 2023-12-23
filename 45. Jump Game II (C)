@@ -1,0 +1,20 @@
+//數列的元素決定下一步可以跳多遠。每一步都以能跳到最遠距離的位置作為下一次跳躍的位置。
+
+int jump(int* nums, int numsSize) {
+    if(numsSize==1) return 0;
+    int curStep=nums[0],preStep=nums[0];//目前能跳躍的最遠距離
+    int count=1;
+    for(int i=1;i<numsSize;i++){
+        if(curStep>=numsSize-1) return count;
+        for(int j=i;j<=preStep;j++){
+            if(j<=curStep){
+                //更新最遠距離
+                curStep=fmax(curStep,j+nums[j]);
+            }
+        }
+        i=preStep;
+        preStep=curStep;
+        count++;
+    }
+return count;
+}
