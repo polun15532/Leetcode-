@@ -1,0 +1,16 @@
+//這題的重點在於把數列為0的位置識別出來，並判斷是否有點能夠跳過這個坑。
+
+bool canJump(int* nums, int numsSize) {
+    int curStep=0;//目前能跳躍的最遠距離
+    for(int i=0;i<numsSize;i++){
+        //用來判斷這個點是否能被跳過
+        if(i<=curStep){
+            //更新最遠距離
+            curStep=fmax(curStep,i+nums[i]);
+        }
+    }
+    if(curStep>=numsSize-1) return true;
+    return false;
+}
+時間複雜度 O(n)
+空間複雜度 O(1)
