@@ -1,0 +1,47 @@
+/*
+題目:piles[i]表示第i堆的石頭數量，每一次取其中一堆石頭的一半共取k次，使石頭總數達到最小。
+由於題目希望找到最少的石頭總數，順序並不重要。因此我先透過排序使陣列元素排列變成單調非遞減，陣列最後面的樹是最大的，從這一堆開始取。
+另外因為陣列需要保持有序性且我不希望每次取一半石頭後還要重新排列數列，因此我會建立一個陣列存取被取走一半石頭的堆。
+*/
+
+
+int cmp (const void * a, const void * b)
+{
+   return ( *(int*)a - *(int*)b );
+}
+int minStoneSum(int* piles, int pilesSize, int k) {
+    //arr用於存取被取走石頭的堆剩下的石頭數量
+    int* arr=(int*)malloc(sizeof(int)*k);
+    memset(arr,0,k);
+    //ptr1與ptr2是用來檢測要從數列的甚麼位置開始比較，被使用過的元素就不會再被比較。
+    int ptr1=pilesSize-1,ptr2=0,sum=0;
+    //計算石頭的總數
+    for(int i=0;i<pilesSize;i++){
+        sum+=piles[i];
+    }
+    //將陣列piles排序
+    qsort(piles, pilesSize, sizeof(int), cmp);
+    for(int i=0;i<k;i++){
+    //
+    if(piles[ptr1]>arr[ptr2]){
+        //考慮到堆的石頭如果為奇數，而對於正數int相除會向下取整 ，因此對於奇數需要在除2後加上1
+        arr[i]=(piles[ptr1]%2==1)?piles[ptr1]/2+1:piles[ptr1]/2;
+        sum-=piles[ptr1]/2;
+        //改變ptr1指的位置，被比較過的數字就不要再比了。
+        ptr1--;
+        //考慮到取的次數k可能大於石頭的堆數，為了不讓ptr1指向錯誤的位置，我把它歸零，另外為了避免第0堆的石頭被重複計數我把它歸0
+        if(ptr1==-1){
+            ptr1=0;
+            piles[ptr1]=0;
+        }
+    }
+    else{
+        //如果那些被取過石頭的堆剩餘石頭數量依然大於pile[ptr1]的數量，就在取一次
+        arr[i]=(arr[ptr2]%2==1)?arr[ptr2]/2+1:arr[ptr2]/2;
+        sum-=arr[ptr2]/2;
+        ptr2++;
+        }
+    }
+    free(arr);
+    return sum;
+}
