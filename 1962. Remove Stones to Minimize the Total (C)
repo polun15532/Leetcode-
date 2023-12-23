@@ -45,3 +45,7 @@ int minStoneSum(int* piles, int pilesSize, int k) {
     free(arr);
     return sum;
 }
+
+時間複雜度 O(nlogn)
+空間複雜度 O(k)
+應該是可以原地更新數列維持時間複雜度並讓空間複雜度變成O(1)，感覺上需要多使用指標。
