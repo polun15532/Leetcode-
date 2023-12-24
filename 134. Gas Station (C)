@@ -1,0 +1,17 @@
+//題目希望找出從哪一個加油站開始每一站提供的油量和都足以應付到下一加油站的消耗。
+//由於不知道從哪個加油站開始，因此我選擇將每個陣列遍歷兩次，如果存在路徑使得油量可以支撐完這段旅程，其開始的順序一定會包含在這個集合內。
+//接下來的問題就是如何找到從第幾個加油站開始才滿足這個條件。我從第0號加油站開始遍歷，如果油量可供旅行到下一個加油站救計數一次，反之則歸零。
+//當計數的次數等於加油站的數目時，所有的加油站都有經過此時返回i-count就是答案。i%gasSize為結束旅行的加油站，count惟經過的加油站數目。
+int canCompleteCircuit(int* gas, int gasSize, int* cost, int costSize) {
+   int capacity=0,count=0;
+    for(int i=0;i<2*gasSize;i++){
+        if(count>=gasSize) return i-count;
+       capacity+=gas[i%gasSize]-cost[i%gasSize];
+        if(capacity>=0) count++;
+        else{
+            count=0;
+            capacity=0;
+        }
+   } 
+    return -1;
+}
