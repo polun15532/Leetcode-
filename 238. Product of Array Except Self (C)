@@ -1,0 +1,25 @@
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+//為什麼題目說不能用除法，這是為了避免除數為零造成的錯誤，在數學上除以0沒有意義。                                                 
+//這題只要建立兩個陣列正掃與反掃，陣列的元素值等於除自身外前面所有的元素的乘積。
+//假設 nums=[a,b,c,d]   只要把下面兩個亙列的元素相乘就等於答案。
+//           1,  a, ab,abc
+//         bcd, cd,  d,  1
+int* productExceptSelf(int* nums, int numsSize, int* returnSize) {
+    *returnSize=numsSize;
+    int* productForward=(int*)malloc(sizeof(int)*numsSize);
+    int* productReverse=(int*)malloc(sizeof(int)*numsSize);
+    productForward[0]=1;
+    productReverse[numsSize-1]=1;
+    for(int i=1;i<numsSize;i++){
+        productForward[i]=productForward[i-1]*nums[i-1];
+        productReverse[numsSize-1-i]=productReverse[numsSize-i]*nums[numsSize-i];
+    }
+    for(int i=0;i<numsSize;i++){
+        nums[i]=productForward[i]*productReverse[i];
+    }
+    free(productForward);
+    free(productReverse);
+    return nums;
+}
