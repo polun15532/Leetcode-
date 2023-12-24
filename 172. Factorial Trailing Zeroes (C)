@@ -19,4 +19,4 @@ int trailingZeroes(int n) {
     }
     return sum;
 }
-時間複雜度 O(log n)
+//時間複雜度 O(log n)
