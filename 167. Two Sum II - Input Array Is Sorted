@@ -1,0 +1,22 @@
+//題目要求選取陣列中任意2個值，如果兩個值得何等於target返回其指標。
+//這題可以使用雙指標掃過，理論上掃過數列一遍可以知道所有答案，因此時間複雜度應為O(n)。
+//我的作法為建立指標left與right分別指向0與numbersSize-1作為起始位置。
+//接著向內收縮，當和大於target時right指標減一，當和小於target時指標減一，遇到何等於target時則返回指標位置。
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* twoSum(int* numbers, int numbersSize, int target, int* returnSize) {
+    * returnSize=2;
+    int *ans=(int*)malloc(sizeof(int)*2);
+    int left=0,right=numbersSize-1;
+    while(left<right){
+        if(numbers[left]+numbers[right]<target)left++;
+        else if(numbers[left]+numbers[right]>target)right--;
+        else{
+            ans[0]=left+1;
+            ans[1]=right+1;
+            return ans;
+        }
+    }
+    return -1;
+}
