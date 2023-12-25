@@ -1,0 +1,24 @@
+//題目問將0到n之間所有整數轉換成二進制計算每一個整數擁有的1位元的數量。
+//我的想法很簡單對於偶數而言直接遍歷找出有多少1，而如果是奇數其1的數量必然為前一個偶數加1。
+//感覺上還可以在省時間，比如我們可以把4個位元作為一組把0~15中1的數量紀錄其來，接著將int的32位元整數分成8個區塊，每個區塊分區查表。
+//感覺上這題的時間複雜度可以優化到O(n)。
+
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* countBits(int n, int* returnSize) {
+    * returnSize=n+1;
+    int* ans=(int*)malloc(sizeof(int)*(n+1));
+    int sum=0,j;
+    for (int i=0;i<=n;i++){
+        sum=0;
+        j=i;
+        while(j){
+            sum+=j%2;
+            j>>=1;
+        }
+        ans[i]=sum;
+        if(++i<=n) ans[i]=sum+1;
+    }
+    return ans;
+}
