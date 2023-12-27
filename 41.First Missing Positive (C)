@@ -1,0 +1,37 @@
+//題目給定一個數組希往找到缺失的第一個正整數EX:[2,3,4]返回1。
+//這題最值觀的做法是利用哈希表，將數組所有正整數存入哈希表後，檢查從1開始的正整數是否存在哈希表就可以完成。
+//此時的時間複雜度是O(n)空間複雜度是O(n)
+//但題目給語的要求是時間複雜度O(n)，額外使用的空間維O(1)，這代表必須使用原數組來完成這個操作。
+//針對這個題目我有兩個想法，第一個是交換，EX:假設nums[0]=5就把這個元素換到nums[5];此外還需要使用另外一個數temp來暫存nums[5]。遍歷時只要找取第一個元素值與下標不同的元素就是答案。
+//第二個兩法則利用負號標記此元素是否存在 如果  abs(num[0])=3，就把nums[3]換成負號。遍歷時只要找取第一個不是負數的元素就是答案。
+
+int firstMissingPositive(int* nums, int numsSize) {
+    int max=0,min=numsSize+1;
+    if(nums[0]!=1&&numsSize==1) return 1;
+    //處理數列中0與負數的部分，並計算數列的最大值與最小值。
+    for(int i=0;i<numsSize;i++){
+        if(nums[i]>0){
+            max=fmax(max,nums[i]);
+            min=fmin(min,nums[i]);
+        }
+        else{
+            nums[i]=min;//把0與負數的部分換成數列已存在的元素。
+        }
+    }
+
+    if(min>1) return 1;
+        int step;
+    for(int i=0;i<numsSize;i++){
+        step=fmax(nums[i]-1,nums[i]*-1-1);//-1是因為我將紀錄的位置都向左移一位比如nums[0]用來判斷數字1是否存在，nums[1]用來判斷2是否存在。
+        if(step<numsSize){
+        nums[step]=fmin(nums[step]*-1,nums[step]);//用負號記錄這個元素是否存在
+        }
+    }
+    for(int i=0;i<numsSize;i++){
+     if(nums[i]>=0) return i+1;
+     if(i==numsSize-1&&nums[i]<0) return numsSize+1;
+    }
+    return numsSize;
+}
+//時間複雜度O(n)
+//額外空間複雜度O(1)
