@@ -1,0 +1,21 @@
+//題目給予兩個數列分別對應氣球的顏色以及取下氣球所需的時間，取下一些氣球使相鄰氣球顏色都不同，找出這個動作的最小時間。
+//直接將數列向右掃，找到相鄰顏色相同的兩個氣球，並取下花費時間最少的那個。
+//由於可能會遇到氣球連續都是同顏色的狀況，因此我使用left來記錄左邊最相鄰的氣球以避免時間花費最小的氣球被重複取的狀況。
+
+int minCost(char * colors, int* neededTime, int neededTimeSize){
+    int left=0,time=0;
+for(int i=1;i<neededTimeSize;i++){
+    if(colors[left]==colors[i]){
+        if(neededTime[left]>neededTime[i]){
+            time+=neededTime[i];
+        }
+        else{
+            time+=neededTime[left];
+            left=i;//left用以記錄沒有被取下的那一個氣球
+        }
+    }
+    else left=i;
+}
+    return time;
+}
+//時間複雜度 O(n)
