@@ -1,0 +1,29 @@
+//給定一個數組rating，其中rating value大的分較多的糖果，每個人最少分一顆糖果，求分糖果的最小總量。
+//需注意的是如果相鄰rating value相等時，糖果的數量是1也滿足條件 ex:rating=[1,2,2] candy=[1,2,1]。
+//我覺得這題的重點在於找到升序序列、降序序列與相等序列之間的關係。
+//對於升序序列中間的元素由於rating[i]>rating[i-1]因此糖果的數量可以定義成比i-1多。
+//正掃的降序序列等價於反掃得正序序列。
+//而對於相等序列而言我們可以先將與到整值的設定為1。
+//現在剩下的問題則在於邊界條件。我們假設有一個數組[1,2,6,5,4,3,2,1]我們知道第3個元素值為6根據正掃升序序列的規則其值為3，而在反掃時其值為6，此時我們只需要取整掃與反掃的最大值就好。
+
+int candy(int* ratings, int ratingsSize) {
+    int *candyAmount=(int*)malloc(sizeof(int)*ratingsSize);
+    for(int i=0;i<ratingsSize;i++){
+        candyAmount[i]=1;//分配1個糖果給所有人
+    }
+    for(int i=1;i<ratingsSize;i++){
+        candyAmount[i]=(ratings[i]>ratings[i-1])?candyAmount[i-1]+1:1;//正掃只要i的元素比i-1大就多酚一個糖果
+    }
+    for(int i=ratingsSize-2;i>=0;i--){
+        candyAmount[i]=(ratings[i]>ratings[i+1])?fmax(candyAmount[i+1]+1,candyAmount[i]):candyAmount[i];//反掃確定要修改的值，使用fmax是因為要確定在邊界時要填入哪一項。
+    }
+    int sum=0;
+    for(int i=0;i<ratingsSize;i++){
+        sum+=candyAmount[i];
+    }
+    free(candyAmount);
+    return sum;
+}
+
+//時間複雜度 O(n)
+//空間複雜度 O(n)
